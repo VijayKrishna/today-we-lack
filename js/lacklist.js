@@ -17,8 +17,8 @@ d3.csv(url, function(error, data) {
   .text(function(d) {
     var date = new Date(d.date);
 
-    var dateString = date.getDate()
-    return dateString.substr(4) + ' // ';
+    var dateString = date.toDateString();
+    return dateString.substring(4) + ' // ';
   })
 
   lacks.append('a')
