@@ -16,6 +16,7 @@ d3.csv(url, function(error, data) {
   lacks.append('span')
   .text(function(d) {
     var date = new Date(d.date);
+    
     var dateString = date.toDateString();
     return dateString + ' // ';
   })
