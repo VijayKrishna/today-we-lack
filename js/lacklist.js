@@ -6,6 +6,10 @@ d3.csv(url, function(error, data) {
   console.log(data);
 
   var sortedData = sortLackList(data);
+  var lackcount = sortedData.length;
+  var countString = 
+  'There have been <b>' + lackcount + '</b> moments when India was lacking.'
+  d3.select('.lackcount').html(countString);
 
   var lacklist = d3.select('ul#lacklist');
   
