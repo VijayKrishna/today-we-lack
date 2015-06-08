@@ -35,13 +35,13 @@ d3.csv(url, function(error, data) {
   })
   .attr('target', '_blank')
 
-  lacks.append('small')
-  .html('<a href="">why?</a>')
-  .attr('class', 'spaced');
+  // lacks.append('small')
+  // .html('<a href="">why?</a>')
+  // .attr('class', 'spaced');
 
-  lacks.append('small')
-  .html('<a href="">share</a>')
-  .attr('class', 'spaced');
+  // lacks.append('small')
+  // .html('<a href="">share</a>')
+  // .attr('class', 'spaced');
 });
 
 function sortLackList(list) {
