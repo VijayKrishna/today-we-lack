@@ -43,10 +43,51 @@ d3.csv(url, function(error, data) {
   // .html('<a href="">why?</a>')
   // .attr('class', 'spaced');
 
-  // lacks.append('small')
-  // .html('<a href="">share</a>')
-  // .attr('class', 'spaced');
+  lacks.append('small')
+  .text(function(d) {
+    var provider = getFormattedProvider(d.url, ' (', ') ');
+    return provider;
+  })
+  .style('color', 'royalblue')
+  .attr('class', 'spaced');
+
+  lacks.append('small')
+  .attr('class', 'spaced')
+  .append('a')
+  .style('color', 'crimson')
+  .text('share')
+  .attr('class', 'spaced')
+  .attr('href', function(d) {
+    var provider = getFormattedProvider(d.url, '%20-%20', '');
+    var lackIndex = d.title.search(' lack ');
+    var lackString = d.title.substring(lackIndex + 1);
+    lackString = lackString.replace(/\s/g,'%20')
+    lackString = '"...' + lackString + '"' + provider;
+    var twitterShare = 'https://twitter.com/intent/tweet?button_hashtag=TodayWeLack&text=' + lackString + '&url=http://treestrokes.github.io/today-we-lack';
+    return twitterShare;  
+  });
 });
+
+function getFormattedProvider(url, s, e) {
+  var provider = getProvider(url);
+  if(provider === '') return '';
+  if(s === null || s === undefined) {
+    s = '('
+  }
+
+  if(e === null || e === undefined) {
+    e = ')'
+  }
+  return s + provider + e;
+}
+
+function getProvider (url) {
+  if(url.startsWith('http://timesofindia.indiatimes.com')) {
+    return 'TOI';
+  }
+
+  return '';
+}
 
 function sortLackList(list) {
   var sortedList = list.sort(function(a, b) {
