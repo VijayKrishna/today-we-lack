@@ -48,7 +48,7 @@ d3.csv(url, function(error, data) {
     var provider = getFormattedProvider(d.url, ' (', ') ');
     return provider;
   })
-  .style('color', 'royalblue')
+  .style('color', 'darkgrey')
   .attr('class', 'spaced');
 
   lacks.append('small')
