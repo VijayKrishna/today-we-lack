@@ -63,7 +63,7 @@ d3.csv(url, function(error, data) {
     var lackString = d.title.substring(lackIndex + 1);
     lackString = lackString.replace(/\s/g,'%20')
     lackString = '"...' + lackString + '"' + provider;
-    var twitterShare = 'https://twitter.com/intent/tweet?button_hashtag=TodayWeLack&text=' + lackString + '&url=http://treestrokes.github.io/today-we-lack';
+    var twitterShare = 'https://twitter.com/intent/tweet?button_hashtag=TodayWeLack&text=' + lackString + '&url=http://bit.ly/1IxwaLE';
     return twitterShare;  
   });
 });
