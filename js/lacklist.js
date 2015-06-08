@@ -7,9 +7,11 @@ d3.csv(url, function(error, data) {
 
   var sortedData = sortLackList(data);
   var lackcount = sortedData.length;
-  var countString = 
-  'There have been <b>' + lackcount + '</b> moments when India was lacking.'
-  d3.select('.lackcount').html(countString);
+  var lackingTill = new Date(sortedData[0].date);
+  var lackingFrom = new Date(sortedData[lackcount - 1].date);
+  var lackSummary = getLackSummary(lackcount, lackingFrom, lackingTill);
+  console.log(lackSummary);
+  d3.select('.lackcount').html(lackSummary);
 
   var lacklist = d3.select('ul#lacklist');
   
@@ -55,4 +57,13 @@ function sortLackList(list) {
     return 0;
   });
   return sortedList;
+}
+
+function getLackSummary(lackcount, from, to) {
+  var summary = 'There have been <b>' 
+  + lackcount 
+  + '</b> moments when India was lacking, from '
+  + from.getFullYear() + ', till the end of '
+  + to.getFullYear() + '.';
+  return summary;
 }
