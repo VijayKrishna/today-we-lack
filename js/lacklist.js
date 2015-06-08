@@ -21,17 +21,18 @@ d3.csv(url, function(error, data) {
 
   lacks.append('span')
   .text(function(d) {
-    // var date = new Date(d.date);
-
-    // var dateString = date.toDateString();
-    // dateString = dateString.substring(4);
     var dateString = new Dumbdate(d.date).toDumbString();
     return dateString + ' // ';
   })
 
   lacks.append('a')
   .html(function(d) {
-    var title = d.title.replace(' lack ', ' <b>lack ');
+    var title;
+    if(d.title.search(' lack ') === -1) {
+      title = d.title.replace('Lack ', '<b>Lack ');
+    } else {
+      title = d.title.replace(' lack ', ' <b>lack '); 
+    }
     return title + '</b>';
   })
   .attr('href', function(d) {
@@ -60,9 +61,18 @@ d3.csv(url, function(error, data) {
   .attr('href', function(d) {
     var provider = getFormattedProvider(d.url, '%20-%20%23', '');
     var lackIndex = d.title.search(' lack ');
-    var lackString = d.title.substring(lackIndex + 1);
-    lackString = lackString.replace(/\s/g,'%20')
-    lackString = '"...' + lackString + '"' + provider;
+    if(lackIndex === -1) {
+      lackIndex = d.title.search('Lack ');
+      var lackString = d.title.substring(lackIndex);
+      lackString = lackString.replace(/\s/g,'%20');
+      lackString = '"' + lackString + '"' + provider;
+    } else {
+      lackIndex += 1;
+      var lackString = d.title.substring(lackIndex);
+      lackString = lackString.replace(/\s/g,'%20');
+      lackString = '"...' + lackString + '"' + provider;
+    }
+
     var twitterShare = 'https://twitter.com/intent/tweet?button_hashtag=TodayWeLack&text=' + lackString + '&url=http://bit.ly/1IxwaLE';
     return twitterShare;  
   });
