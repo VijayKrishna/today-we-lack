@@ -115,8 +115,8 @@ function sortLackList(list) {
 function getLackSummary(lackcount, from, to) {
   var summary = 'There have been <b>' 
   + lackcount
-  + '</b> moments when India was lacking something, from '
-  + from.getFullYear() + ', to '
+  + '</b> moments when India was lacking something, between '
+  + from.getFullYear() + ' and '
   + to.getFullYear() + '.';
   return summary;
 }
