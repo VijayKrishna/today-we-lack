@@ -3,14 +3,12 @@ d3.csv(url, function(error, data) {
   if(error) {
     data = null;
   }
-  console.log(data);
 
   var sortedData = sortLackList(data);
   var lackcount = sortedData.length;
   var lackingTill = new Date(sortedData[0].date);
   var lackingFrom = new Date(sortedData[lackcount - 1].date);
-  var lackSummary = getLackSummary(lackcount, lackingFrom, lackingTill);
-  console.log(lackSummary);
+  var lackSummary = getLacksSummary(lackcount, lackingFrom, lackingTill);
   d3.select('.lackcount').html(lackSummary);
 
   var lacklist = d3.select('ul#lacklist');
@@ -27,13 +25,7 @@ d3.csv(url, function(error, data) {
 
   lacks.append('a')
   .html(function(d) {
-    var title;
-    if(d.title.search(' lack ') === -1) {
-      title = d.title.replace('Lack ', '<b>Lack ');
-    } else {
-      title = d.title.replace(' lack ', ' <b>lack '); 
-    }
-    return title + '</b>';
+    return d.getHighlightedTitle();
   })
   .attr('href', function(d) {
     return d.url;
@@ -46,11 +38,24 @@ d3.csv(url, function(error, data) {
 
   lacks.append('small')
   .text(function(d) {
-    var provider = getFormattedProvider(d.url, ' (', ') ');
+    var provider = d.toFormatedUrlProvider(' (', ') ');
     return provider;
   })
   .style('color', 'darkgrey')
   .attr('class', 'spaced');
+
+  lacks.selectAll('small')
+  .data(function(d) {
+    var tags = d.getTags();
+    tags.unshift('');
+    return tags;
+  })
+  .enter().append('small')
+  .text(function(d) {
+    return '[' + d + ']';
+  })
+  .attr('class', 'spaced')
+  .style('color', 'darkgrey');
 
   lacks.append('small')
   .attr('class', 'spaced')
@@ -59,47 +64,19 @@ d3.csv(url, function(error, data) {
   .text('share')
   .attr('class', 'spaced')
   .attr('href', function(d) {
-    var provider = getFormattedProvider(d.url, '%20-%20%23', '');
-    var lackIndex = d.title.search(' lack ');
-    if(lackIndex === -1) {
-      lackIndex = d.title.search('Lack ');
-      var lackString = d.title.substring(lackIndex);
-      lackString = lackString.replace(/\s/g,'%20');
-      lackString = '"' + lackString + '"' + provider;
-    } else {
-      lackIndex += 1;
-      var lackString = d.title.substring(lackIndex);
-      lackString = lackString.replace(/\s/g,'%20');
-      lackString = '"...' + lackString + '"' + provider;
-    }
+    var lackTitle = d.getLackTitle();
 
-    var twitterShare = 'https://twitter.com/intent/tweet?button_hashtag=TodayWeLack&text=' + lackString + '&url=http://bit.ly/1IxwaLE';
+    var twitterShare = 'https://twitter.com/intent/tweet?button_hashtag=TodayWeLack&text=' + lackTitle + '&url=http://bit.ly/1IxwaLE';
     return twitterShare;  
   });
 });
 
-function getFormattedProvider(url, s, e) {
-  var provider = getProvider(url);
-  if(provider === '') return '';
-  if(s === null || s === undefined) {
-    s = '('
-  }
-
-  if(e === null || e === undefined) {
-    e = ')'
-  }
-  return s + provider + e;
-}
-
-function getProvider (url) {
-  if(url.startsWith('http://timesofindia.indiatimes.com')) {
-    return 'TOI';
-  }
-
-  return '';
-}
-
-function sortLackList(list) {
+function sortLackList(data) {
+  var list = data.map(function(element) {
+    var lackitem = new Lackitem(element);
+    lackitem.mineUrlForTags();
+    return lackitem;
+  });
   var sortedList = list.sort(function(a, b) {
     if (a.date > b.date) {
       return -1;
@@ -112,7 +89,7 @@ function sortLackList(list) {
   return sortedList;
 }
 
-function getLackSummary(lackcount, from, to) {
+function getLacksSummary(lackcount, from, to) {
   var summary = 'There have been <b>' 
   + lackcount
   + '</b> moments when India was lacking something, between '
@@ -120,27 +97,3 @@ function getLackSummary(lackcount, from, to) {
   + to.getFullYear() + '.';
   return summary;
 }
-
-var Dumbdate = function(date_string) {
-  this.date_string = date_string;
-  this.date_array = date_string.split('-');
-}
-
-Dumbdate.prototype.getYear = function() {
-  return this.date_array[0];
-};
-
-Dumbdate.prototype.getMonth = function() {
-  return this.date_array[1];
-};
-
-Dumbdate.prototype.getDate = function() {
-  return this.date_array[2];
-};
-
-Dumbdate.prototype.toDumbString = function() {
-  var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  var monthIndex = parseInt(this.getMonth()) - 1;
-  var monthString = months[monthIndex];
-  return monthString + ' ' + this.getDate() + ' ' + this.getYear();
-};
