@@ -11,10 +11,17 @@ d3.csv(url, function(error, data) {
   var lackSummary = getLacksSummary(lackcount, lackingFrom, lackingTill);
   d3.select('.lackcount').html(lackSummary);
 
+  display(sortedData);
+
+});
+
+function display(data) {
+
   var lacklist = d3.select('ul#lacklist');
+  lacklist.html('');
   
   var lacks = lacklist.selectAll('li')
-  .data(sortedData)
+  .data(data)
   .enter().append('li');
 
   lacks.append('span')
@@ -69,7 +76,7 @@ d3.csv(url, function(error, data) {
     var twitterShare = 'https://twitter.com/intent/tweet?button_hashtag=TodayWeLack&text=' + lackTitle + '&url=http://bit.ly/1IxwaLE';
     return twitterShare;  
   });
-});
+}
 
 function sortLackList(data) {
   var list = data.map(function(element) {
