@@ -6,8 +6,23 @@
 <link rel="stylesheet" type="text/css" href="css/style.css">
 <script type='text/javascript' src="js/lib/d3.min.js"></script>
 <script data-main="scripts/main" src="js/lib/require.js"></script>
-<!-- <script type='text/javascript' src="js/dumbdate.js"></script> -->
 <script type='text/javascript' src="js/lacklist.js"></script>
+<script>window.twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+  if (d.getElementById(id)) return t;
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  fjs.parentNode.insertBefore(js, fjs);
+ 
+  t._e = [];
+  t.ready = function(f) {
+    t._e.push(f);
+  };
+ 
+  return t;
+}(document, "script", "twitter-wjs"));</script>
 </head>
 
 <body>
@@ -27,9 +42,11 @@
 
 <p>We are collecting news headlines from websites such as the Times of India. From such a massive pool of headlines we are simply searching for those headlines that has the word 'lack' in it. We find that such headlines explicitly call out on things that we as a people lack, every now and then.</p>
 
-<p>Obviously, this is all still a work in progress, and we expect to expand this to more news outlets and make the website more real-time. But, for now feel free to take a look at this list of things that India lacks, and tell us what you think about it by giving us a shoutout on twitter with the hashtag #todaywelack. Thank you all!</p>
+<p>Obviously, this is all still a work in progress, and we expect to expand this to more news outlets and make the website more real-time. But, for now feel free to take a look at this list of things that India lacks, and tell us what you think about it by giving us a shoutout on twitter with the hashtag #TodayWeLack.</p>
 
-<p>Vijay and Paritosh</p>
+<a href="https://twitter.com/intent/tweet?button_hashtag=TodayWeLack&text=Check%20out%20what%20India%20lacks%20today%20at%20" class="twitter-hashtag-button" data-related="treestrokes" data-url="http://treestrokes.github.io/today-we-lack">Tweet #TodayWeLack</a>
+
+<p>Thank you all!<br>Vijay and Paritosh</p>
 </div>
 <!-- please do not remove this line -->
 
