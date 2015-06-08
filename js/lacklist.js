@@ -21,10 +21,12 @@ d3.csv(url, function(error, data) {
 
   lacks.append('span')
   .text(function(d) {
-    var date = new Date(d.date);
+    // var date = new Date(d.date);
 
-    var dateString = date.toDateString();
-    return dateString.substring(4) + ' // ';
+    // var dateString = date.toDateString();
+    // dateString = dateString.substring(4);
+    var dateString = new Dumbdate(d.date).toDumbString();
+    return dateString + ' // ';
   })
 
   lacks.append('a')
@@ -61,9 +63,33 @@ function sortLackList(list) {
 
 function getLackSummary(lackcount, from, to) {
   var summary = 'There have been <b>' 
-  + lackcount 
-  + '</b> moments when India was lacking, from '
-  + from.getFullYear() + ', till the end of '
+  + lackcount
+  + '</b> moments when India was lacking something, from '
+  + from.getFullYear() + ', to '
   + to.getFullYear() + '.';
   return summary;
 }
+
+var Dumbdate = function(date_string) {
+  this.date_string = date_string;
+  this.date_array = date_string.split('-');
+}
+
+Dumbdate.prototype.getYear = function() {
+  return this.date_array[0];
+};
+
+Dumbdate.prototype.getMonth = function() {
+  return this.date_array[1];
+};
+
+Dumbdate.prototype.getDate = function() {
+  return this.date_array[2];
+};
+
+Dumbdate.prototype.toDumbString = function() {
+  var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  var monthIndex = parseInt(this.getMonth()) - 1;
+  var monthString = months[monthIndex];
+  return monthString + ' ' + this.getDate() + ' ' + this.getYear();
+};
