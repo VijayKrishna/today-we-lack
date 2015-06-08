@@ -58,7 +58,7 @@ d3.csv(url, function(error, data) {
   .text('share')
   .attr('class', 'spaced')
   .attr('href', function(d) {
-    var provider = getFormattedProvider(d.url, '%20-%20', '');
+    var provider = getFormattedProvider(d.url, '%20-%20%23', '');
     var lackIndex = d.title.search(' lack ');
     var lackString = d.title.substring(lackIndex + 1);
     lackString = lackString.replace(/\s/g,'%20')
