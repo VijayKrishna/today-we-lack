@@ -10,7 +10,7 @@ d3.csv(url, function(error, data) {
   var sortedData = sortLackList(data);
   allData = sortedData;
   allCities = getCityList(sortedData);
-  buildTermDocumentMatix(sortedData);
+  buildDocumentVector(sortedData);
   var lackcount = sortedData.length;
   var lackingTill = new Date(sortedData[0].date);
   var lackingFrom = new Date(sortedData[lackcount - 1].date);
