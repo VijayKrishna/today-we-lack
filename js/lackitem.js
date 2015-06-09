@@ -73,20 +73,28 @@ Lackitem.prototype.getHighlightedTitle = function() {
   return title + '</b>';
 };
 
-Lackitem.prototype.getLackTitle = function() {
+Lackitem.prototype.getLackTitle = function(shouldFormat) {
   var provider = this.toFormatedUrlProvider('%20-%20%23', '');
   var lackIndex = this.title.search(' lack ');
   var lackString;
+  var prefix = null;
   if(lackIndex === -1) {
     lackIndex = this.title.search('Lack ');
-    lackString = this.title.substring(lackIndex);
-    lackString = lackString.replace(/\s/g,'%20');
-    lackString = '"' + lackString + '"' + provider;
+    prefix = '"';
   } else {
     lackIndex += 1;
-    lackString = this.title.substring(lackIndex);
-    lackString = lackString.replace(/\s/g,'%20');
-    lackString = '"...' + lackString + '"' + provider;
+    prefix = '"...';
   }
+
+  lackString = this.title.substring(lackIndex);
+  lackString = lackString.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()\?]/g,"");
+  lackString = lackString.trim();
+  if(shouldFormat != null 
+      && shouldFormat != undefined 
+      && shouldFormat === true) {
+    lackString = lackString.replace(/\s/g,'%20');
+    lackString = prefix + lackString + '"' + provider;  
+  }
+
   return lackString;
 };
