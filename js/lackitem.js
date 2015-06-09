@@ -76,7 +76,7 @@ Lackitem.prototype.getHighlightedTitle = function() {
 Lackitem.prototype.getLackTitle = function(shouldFormat) {
   var provider = this.toFormatedUrlProvider('%20-%20%23', '');
   var lackIndex = this.title.search(' lack ');
-  var lackString;
+
   var prefix = null;
   if(lackIndex === -1) {
     lackIndex = this.title.search('Lack ');
@@ -86,15 +86,12 @@ Lackitem.prototype.getLackTitle = function(shouldFormat) {
     prefix = '"...';
   }
 
-  lackString = this.title.substring(lackIndex);
+  var lackString = this.title.substring(lackIndex);
   lackString = lackString.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()\?]/g,"");
   lackString = lackString.trim();
-  if(shouldFormat != null 
-      && shouldFormat != undefined 
-      && shouldFormat === true) {
+  if(shouldFormat === true) {
     lackString = lackString.replace(/\s/g,'%20');
-    lackString = prefix + lackString + '"' + provider;  
+    lackString = prefix + lackString + '"' + provider;
   }
-
   return lackString;
 };

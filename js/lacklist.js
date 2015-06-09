@@ -10,19 +10,32 @@ d3.csv(url, function(error, data) {
   var sortedData = sortLackList(data);
   allData = sortedData;
   allCities = getCityList(sortedData);
-  buildDocumentVector(sortedData);
   var lackcount = sortedData.length;
   var lackingTill = new Date(sortedData[0].date);
   var lackingFrom = new Date(sortedData[lackcount - 1].date);
   var lackSummary = getLacklistSummary(lackcount, lackingFrom, lackingTill);
   d3.select('.lackcount').html(lackSummary);
-  display(sortedData);
+  display(byYearData(sortedData, '2015'));
 });
+
+function displayByYear(year) {
+  var data = byYearData(allData, year);
+  display(data);
+}
+
+function byYearData(data, year) {
+  var filteredData = data.filter(function(element) {
+    return element.date.startsWith(year);
+  });
+  return filteredData;
+}
 
 function display(data) {
   var lacklist = d3.select('ul#lacklist');
-  lacklist.html('');
+  // lacklist.html("");
+  lacklist.selectAll("li").remove();
   
+
   var lacks = lacklist.selectAll('li')
   .data(data)
   .enter().append('li');
@@ -56,8 +69,14 @@ function display(data) {
 
   lacks.selectAll('small')
   .data(function(d) {
-    var tags = d.getTags();
+    var tags = [];
     tags.unshift('');
+
+    var realTags = d.getTags();
+    for(var i = 0; i < realTags.length; i += 1) {
+      tags.push(realTags[i]);
+    }
+    
     return tags;
   })
   .enter().append('small')
@@ -74,8 +93,7 @@ function display(data) {
   .text('share')
   .attr('class', 'spaced')
   .attr('href', function(d) {
-    var lackTitle = d.getLackTitle();
-
+    var lackTitle = d.getLackTitle(true);
     var twitterShare = 'https://twitter.com/intent/tweet?button_hashtag=TodayWeLack&text=' + lackTitle + '&url=http://bit.ly/1IxwaLE';
     return twitterShare;  
   });
@@ -146,17 +164,21 @@ function buildDocumentVector(lackitems) {
     matrix.push(lackArray);
   }
   console.log(matrix.length);
+  return matrix;
 }
 
 function computeTfIdf(documentVector) {
-  var getWords = function(documentVector) {
+  var getWords = function(docVector) {
     var words = [];
-    for(var i = 0; i < documentVector.length; i += 1) {
-      var document = documentVector[i];
+    for(var i = 0; i < docVector.length; i += 1) {
+      var document = docVector[i];
       if(document === null) continue;
-      for(var j = 0; j < document; j += 1) {
+      for(var j = 0; j < document.length; j += 1) {
         var word = document[j];
-        if(word === null || word === undefined || word.length === 0) {
+        if(word === null 
+            || word === undefined 
+            || word.length === 0
+            || words.indexOf(word) != -1) {
           continue;
         }
         words.push(word);
@@ -165,11 +187,57 @@ function computeTfIdf(documentVector) {
     return words;
   }
 
-  var tfMatrix = function(documentVector, wordcount) {
-    // body...
+  var getTfVector = function(docVector, words) {
+    var tfs = [];
+    for(var i = 0; i < words.length; i += 1) {
+      var word = words[i];
+      var count = 0;
+      for(var j = 0; j < docVector.length; j += 1) {
+        if(docVector[j].indexOf(word) != -1) count += 1;
+      }
+      tfs.push(count);
+    }
+    return tfs;
+  }
+
+  var getIdfVector = function(docVector, words) {
+    var idfs = [];
+    var logDocCount = Math.log(docVector.length);
+    for(var i = 0; i < words.length; i += 1) {
+      var word = words[i];
+      var count = 0;
+      for(var j = 0; j < docVector.length; j += 1) {
+        if(docVector[j].indexOf(word) != -1) count += 1;
+      }
+      var idf = logDocCount - (count === 0? 0 : Math.log(count));
+      idfs.push(idf);
+    }
+    return idfs;
+  }
+
+  var getScoredWords = function(words, scores) {
+    var scoredWords = [];
+    for(var i = 0; i < words.length; i += 1) {
+      var scoredWord = { 'word':words[i], 'score':scores[i] };
+      scoredWords.push(scoredWord);  
+    }
+
+    scoredWords.sort(function(a, b) {
+      return b.score - a.score;
+    });
+
+    return scoredWords;
   }
 
   var words = getWords(documentVector);
+  // console.log(words);
   var wordcount = words.length;
-
+  var tfs = getTfVector(documentVector, words);
+  var idfs = getIdfVector(documentVector, words);
+  var scores = [];
+  for(var i = 0; i < wordcount; i += 1) {
+    scores.push(tfs[i] * idfs[i]);
+  }
+  var scoredWords = getScoredWords(words, scores);
+  console.log(scoredWords);
 }
