@@ -10,13 +10,34 @@ d3.csv(url, function(error, data) {
   var sortedData = sortLackList(data);
   allData = sortedData;
   allCities = getCityList(sortedData);
+  
+  var cityLis = d3.select('#city').selectAll('li')
+  .data(allCities)
+  .enter().append('li');
+
+  cityLis.append('button')
+  .attr('class', 'button')
+  .on('click', function(d) {
+    return displayByCity(d);
+  })
+  .text(function(d) {
+    return d;
+  })
+
+
   var lackcount = sortedData.length;
   var lackingTill = new Date(sortedData[0].date);
   var lackingFrom = new Date(sortedData[lackcount - 1].date);
   var lackSummary = getLacklistSummary(lackcount, lackingFrom, lackingTill);
   d3.select('.lackcount').html(lackSummary);
-  display(byYearData(sortedData, '2015'));
+  // display(byYearData(sortedData, '2015'));
+  display(byCityData(sortedData, 'delhi'));
 });
+
+function displayByCity(city) {
+  var data = byCityData(allData, city);
+  display(data);
+}
 
 function displayByYear(year) {
   var data = byYearData(allData, year);
@@ -26,6 +47,24 @@ function displayByYear(year) {
 function byYearData(data, year) {
   var filteredData = data.filter(function(element) {
     return element.date.startsWith(year);
+  });
+  return filteredData;
+}
+
+function byCityData(data, city) {
+  var filteredData = data.filter(function(element) {
+    var tags = element.getTags();
+    var cityIndex = tags.indexOf('city');
+    if(cityIndex === -1) {
+      return false;
+    } else {
+      var actualCity = tags[cityIndex + 1];
+      if(actualCity === city) {
+        return true;
+      } else {
+        return false;
+      }
+    }
   });
   return filteredData;
 }
