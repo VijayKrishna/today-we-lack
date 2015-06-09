@@ -30,8 +30,8 @@ d3.csv(url, function(error, data) {
   var lackingFrom = new Date(sortedData[lackcount - 1].date);
   var lackSummary = getLacklistSummary(lackcount, lackingFrom, lackingTill);
   d3.select('.lackcount').html(lackSummary);
-  // display(byYearData(sortedData, '2015'));
-  display(byCityData(sortedData, 'delhi'));
+  display(byYearData(sortedData, '2015'));
+  // display(byCityData(sortedData, 'delhi'));
 });
 
 function displayByCity(city) {
