@@ -45,6 +45,12 @@ function go(argument) {
   });
 }
 
+function displayByYear(year) {
+  var filter = {};
+  filter.year = year;
+  displayFilteredData(filter);
+}
+
 function displayFilteredData(filter) {
   var data = allData;
   data = byYearData(data, filter.year);
@@ -81,7 +87,6 @@ function byCityData(data, city) {
 
 function display(data) {
   var lacklist = d3.select('ul#lacklist');
-  // lacklist.html("");
   lacklist.selectAll("li").remove();
   
 

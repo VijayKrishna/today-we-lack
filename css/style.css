@@ -121,3 +121,35 @@ button::-moz-focus-inner {
 .block {
   display: block;
 }
+
+select::-moz-focus-inner {
+  border: 0;
+  outline: none;
+}
+
+select::-moz-focus-outer {
+  border: 0;
+  outline: none;
+}
+
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border: none;
+  overflow: hidden;
+  background-color: white;
+  color:#000;
+  font: normal 1em georgia, sans-serif;
+  outline: none;
+
+}
+
+select::-ms-expand { /* for IE 11 */
+    display: none;
+}
+
+select:focus {
+  outline: none;
+  border: none;
+}

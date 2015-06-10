@@ -21,16 +21,17 @@ Lackitem.prototype.getUrl = function() {
 Lackitem.prototype.mineUrlForTags = function() {
   var urlsplit = this.url.split('//');
   var tagsplit = urlsplit[urlsplit.length - 1].split('/');
-  // var count = 0;
+
   for(var i = 0; i < tagsplit.length - 3; i += 1) {
-    // console.log(tagsplit[i])
     var tag = tagsplit[i];
-    if(tag === null || tag === undefined || tag.length === 0) {
+    if(tag === null 
+        || tag === undefined 
+        || tag.length === 0
+        || tag.toLowerCase().contains('lack-')) {
       continue;
     }
 
     this.tags.push(tag);
-    // count += 1;
   }
 }
 
