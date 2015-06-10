@@ -1,50 +1,59 @@
 var url = 'data/lack.csv';
 var allData = null;
 var allCities = null;
-d3.csv(url, function(error, data) {
-  if(error) {
-    data = null;
-    return;
-  }
 
-  var sortedData = sortLackList(data);
-  allData = sortedData;
-  allCities = getCityList(sortedData);
-  
-  var cityLis = d3.select('#city').selectAll('li')
-  .data(allCities)
-  .enter().append('li');
+function go(argument) {
+  d3.csv(url, function(error, data) {
+    if(error) {
+      data = null;
+      return;
+    }
 
-  cityLis.append('button')
-  .attr('class', 'button')
-  .on('click', function(d) {
-    return displayByCity(d);
-  })
-  .text(function(d) {
-    return d;
-  })
+    var sortedData = sortLackList(data);
+    allData = sortedData;
+    allCities = getCityList(sortedData);
+    
+    var cityLis = d3.select('#cities').selectAll('li')
+    .data(allCities)
+    .enter().append('li');
 
+    cityLis.append('button')
+    .attr('class', 'button')
+    .on('click', function(d) {
+      return displayFilteredData({'city': d});
+    })
+    .text(function(d) {
+      return d;
+    });
 
-  var lackcount = sortedData.length;
-  var lackingTill = new Date(sortedData[0].date);
-  var lackingFrom = new Date(sortedData[lackcount - 1].date);
-  var lackSummary = getLacklistSummary(lackcount, lackingFrom, lackingTill);
-  d3.select('#lackcount').html(lackSummary);
-  display(byYearData(sortedData, '2015'));
-  // display(byCityData(sortedData, 'delhi'));
-});
+    var lackcount = sortedData.length;
+    var lackingTill = new Date(sortedData[0].date);
+    var lackingFrom = new Date(sortedData[lackcount - 1].date);
+    var lackSummary = getLacklistSummary(lackcount, lackingFrom, lackingTill);
+    d3.select('#lackcount').html(lackSummary);
+    
+    var firstButton = d3.select('ul#'+argument).select('li').select('button');
+    firstButton.node().focus();
+    var filter = {};
+    if(argument === 'years') {
+      filter.year = firstButton.text();
+    } else if(argument === 'cities') {
+      filter.city = firstButton.text();
+    }
 
-function displayByCity(city) {
-  var data = byCityData(allData, city);
-  display(data);
+    displayFilteredData(filter);
+  });
 }
 
-function displayByYear(year) {
-  var data = byYearData(allData, year);
+function displayFilteredData(filter) {
+  var data = allData;
+  data = byYearData(data, filter.year);
+  data = byCityData(data, filter.city);
   display(data);
 }
 
 function byYearData(data, year) {
+  if(year === null || year === undefined) return data;
   var filteredData = data.filter(function(element) {
     return element.date.startsWith(year);
   });
@@ -52,6 +61,7 @@ function byYearData(data, year) {
 }
 
 function byCityData(data, city) {
+  if(city === null || city === undefined) return data;
   var filteredData = data.filter(function(element) {
     var tags = element.getTags();
     var cityIndex = tags.indexOf('city');
