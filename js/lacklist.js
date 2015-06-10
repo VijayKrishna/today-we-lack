@@ -12,7 +12,7 @@ function go(argument) {
     var sortedData = sortLackList(data);
     allData = sortedData;
     allCities = getCityList(sortedData);
-    
+    console.log(allCities);
     var cityLis = d3.select('#cities').selectAll('li')
     .data(allCities)
     .enter().append('li');
@@ -196,8 +196,8 @@ function getCityList(lackitems) {
     if(cities.indexOf(city) === -1) {
       cities.push(city);
     }
-
   }
+  
   return cities.sort();
 }
 

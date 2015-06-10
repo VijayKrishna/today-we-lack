@@ -27,7 +27,7 @@ Lackitem.prototype.mineUrlForTags = function() {
     if(tag === null 
         || tag === undefined 
         || tag.length === 0
-        || tag.toLowerCase().contains('lack-')) {
+        || tag.toLowerCase().indexOf('lack-') != -1) {
       continue;
     }
 
