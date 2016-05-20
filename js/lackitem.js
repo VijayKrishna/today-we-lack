@@ -4,7 +4,7 @@ var Lackitem = function(rawdata) {
   this.url = rawdata.url;
   this.tags = [];
   this.provider = null;
-}
+};
 
 Lackitem.prototype.getDate = function() {
   return this.date;
@@ -33,7 +33,7 @@ Lackitem.prototype.mineUrlForTags = function() {
 
     this.tags.push(tag);
   }
-}
+};
 
 Lackitem.prototype.getTags = function(first_argument) {
   return this.tags;
@@ -55,11 +55,11 @@ Lackitem.prototype.toFormatedUrlProvider = function(s, e) {
   var provider = this.getUrlProvider();
   if(provider === '') return '';
   if(s === null || s === undefined) {
-    s = '('
+    s = '(';
   }
 
   if(e === null || e === undefined) {
-    e = ')'
+    e = ')';
   }
   return s + provider + e;
 };

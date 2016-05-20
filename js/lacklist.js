@@ -3,8 +3,8 @@ var allData = null;
 var allCities = null;
 
 function go(argument) {
-  d3.csv(url, function(error, data) {
-    if(error) {
+  d3.csv(url, function (error, data) {
+    if (error) {
       data = null;
       return;
     }
@@ -14,15 +14,15 @@ function go(argument) {
     allCities = getCityList(sortedData);
     console.log(allCities);
     var cityLis = d3.select('#cities').selectAll('li')
-    .data(allCities)
-    .enter().append('li');
+      .data(allCities)
+      .enter().append('li');
 
     cityLis.append('button')
-    .attr('class', 'button')
-    .on('click', function(d) {
-      return displayFilteredData({'city': d});
+      .attr('class', 'button')
+      .on('click', function (d) {
+      return displayFilteredData({ 'city': d });
     })
-    .text(function(d) {
+      .text(function (d) {
       return d;
     });
 
@@ -31,13 +31,13 @@ function go(argument) {
     var lackingFrom = new Date(sortedData[lackcount - 1].date);
     var lackSummary = getLacklistSummary(lackcount, lackingFrom, lackingTill);
     d3.select('#lackcount').html(lackSummary);
-    
-    var firstButton = d3.select('ul#'+argument).select('li').select('button');
+
+    var firstButton = d3.select('ul#' + argument).select('li').select('button');
     firstButton.node().focus();
     var filter = {};
-    if(argument === 'years') {
+    if (argument === 'years') {
       filter.year = firstButton.text();
-    } else if(argument === 'cities') {
+    } else if (argument === 'cities') {
       filter.city = firstButton.text();
     }
 
@@ -59,23 +59,23 @@ function displayFilteredData(filter) {
 }
 
 function byYearData(data, year) {
-  if(year === null || year === undefined) return data;
-  var filteredData = data.filter(function(element) {
+  if (year === null || year === undefined) return data;
+  var filteredData = data.filter(function (element) {
     return element.date.startsWith(year);
   });
   return filteredData;
 }
 
 function byCityData(data, city) {
-  if(city === null || city === undefined) return data;
-  var filteredData = data.filter(function(element) {
+  if (city === null || city === undefined) return data;
+  var filteredData = data.filter(function (element) {
     var tags = element.getTags();
     var cityIndex = tags.indexOf('city');
-    if(cityIndex === -1) {
+    if (cityIndex === -1) {
       return false;
     } else {
       var actualCity = tags[cityIndex + 1];
-      if(actualCity === city) {
+      if (actualCity === city) {
         return true;
       } else {
         return false;
@@ -88,78 +88,78 @@ function byCityData(data, city) {
 function display(data) {
   var lacklist = d3.select('ul#lacklist');
   lacklist.selectAll("li").remove();
-  
+
 
   var lacks = lacklist.selectAll('li')
-  .data(data)
-  .enter().append('li');
+    .data(data)
+    .enter().append('li');
 
   lacks.append('span')
-  .text(function(d) {
+    .text(function (d) {
     var dateString = new Dumbdate(d.date).toDumbString();
     return dateString + ' // ';
-  })
+  });
 
   lacks.append('a')
-  .html(function(d) {
+    .html(function (d) {
     return d.getHighlightedTitle();
   })
-  .attr('href', function(d) {
+    .attr('href', function (d) {
     return d.url;
   })
-  .attr('target', '_blank')
+    .attr('target', '_blank')
 
   // lacks.append('small')
   // .html('<a href="">why?</a>')
   // .attr('class', 'spaced');
 
   lacks.append('small')
-  .text(function(d) {
+    .text(function (d) {
     var provider = d.toFormatedUrlProvider(' (', ') ');
     return provider;
   })
-  .style('color', 'darkgrey')
-  .attr('class', 'spaced');
+    .style('color', 'darkgrey')
+    .attr('class', 'spaced');
 
   lacks.selectAll('small')
-  .data(function(d) {
+    .data(function (d) {
     var tags = [];
     tags.unshift('');
 
     var realTags = d.getTags();
-    for(var i = 0; i < realTags.length; i += 1) {
+    for (var i = 0; i < realTags.length; i += 1) {
       tags.push(realTags[i]);
     }
-    
+
     return tags;
   })
-  .enter().append('small')
-  .text(function(d) {
+    .enter().append('small')
+    .text(function (d) {
     return '[' + d + ']';
   })
-  .attr('class', 'spaced')
-  .style('color', 'darkgrey');
+    .attr('class', 'spaced')
+    .style('color', 'darkgrey');
 
   lacks.append('small')
-  .attr('class', 'spaced')
-  .append('a')
-  .style('color', 'crimson')
-  .text('share')
-  .attr('class', 'spaced')
-  .attr('href', function(d) {
+    .attr('class', 'spaced')
+    .append('a')
+    .style('color', 'crimson')
+    .text('share')
+    .attr('class', 'spaced')
+    .attr('href', function (d) {
     var lackTitle = d.getLackTitle(true);
     var twitterShare = 'https://twitter.com/intent/tweet?button_hashtag=TodayWeLack&text=' + lackTitle + '&url=http://bit.ly/1IxwaLE';
-    return twitterShare;  
+    return twitterShare;
   });
 }
 
 function sortLackList(data) {
-  var list = data.map(function(element) {
+  var list = data.map(function (element) {
     var lackitem = new Lackitem(element);
     lackitem.mineUrlForTags();
     return lackitem;
   });
-  var sortedList = list.sort(function(a, b) {
+  var sortedList = list.sort(function (a, b) {
     if (a.date > b.date) {
       return -1;
     }
@@ -172,47 +172,47 @@ function sortLackList(data) {
 }
 
 function getLacklistSummary(lackcount, from, to) {
-  var summary = 'There have been <b>' 
-  + lackcount
-  + '</b> moments when India was lacking something, between '
-  + from.getFullYear() + ' and '
-  + to.getFullYear() + '.';
+  var summary = 'There have been <b>'
+    + lackcount
+    + '</b> moments when India was lacking something, between '
+    + from.getFullYear() + ' and '
+    + to.getFullYear() + '.';
   return summary;
 }
 
 function getCityList(lackitems) {
   var cities = [];
-  for(var i = 0; i < lackitems.length; i += 1) {
+  for (var i = 0; i < lackitems.length; i += 1) {
     var tags = lackitems[i].getTags();
     var cityIndex = tags.indexOf('city');
-    if(cityIndex === -1) continue;
+    if (cityIndex === -1) continue;
     var city = tags[cityIndex + 1];
-    if(city === null || city === undefined || city.length === 0) {
+    if (city === null || city === undefined || city.length === 0) {
       continue;
     }
 
     city = city.toLowerCase();
 
-    if(cities.indexOf(city) === -1) {
+    if (cities.indexOf(city) === -1) {
       cities.push(city);
     }
   }
-  
+
   return cities.sort();
 }
 
 function buildDocumentVector(lackitems) {
   var matrix = [];
   var formatOpt = false;
-  for(var i = 0; i < lackitems.length; i += 1) {
+  for (var i = 0; i < lackitems.length; i += 1) {
     var lackitem = lackitems[i];
     var lacktitle = lackitem.getLackTitle(formatOpt);
     lacktitle = lacktitle.removeStopWords();
     var lackArray = lacktitle.toLowerCase().split(/\s+/);
-    if(lackArray[0] === 'lack') lackArray.shift();
-    if(lackArray === null 
-        || lackArray === undefined
-        || !Array.isArray(lackArray)) {
+    if (lackArray[0] === 'lack') lackArray.shift();
+    if (lackArray === null
+      || lackArray === undefined
+      || !Array.isArray(lackArray)) {
       lackArray = [];
     }
     matrix.push(lackArray);
@@ -222,66 +222,66 @@ function buildDocumentVector(lackitems) {
 }
 
 function computeTfIdf(documentVector) {
-  var getWords = function(docVector) {
+  var getWords = function (docVector) {
     var words = [];
-    for(var i = 0; i < docVector.length; i += 1) {
+    for (var i = 0; i < docVector.length; i += 1) {
       var document = docVector[i];
-      if(document === null) continue;
-      for(var j = 0; j < document.length; j += 1) {
+      if (document === null) continue;
+      for (var j = 0; j < document.length; j += 1) {
         var word = document[j];
-        if(word === null 
-            || word === undefined 
-            || word.length === 0
-            || words.indexOf(word) != -1) {
+        if (word === null
+          || word === undefined
+          || word.length === 0
+          || words.indexOf(word) != -1) {
           continue;
         }
         words.push(word);
       }
     }
     return words;
-  }
+  };
 
-  var getTfVector = function(docVector, words) {
+  var getTfVector = function (docVector, words) {
     var tfs = [];
-    for(var i = 0; i < words.length; i += 1) {
+    for (var i = 0; i < words.length; i += 1) {
       var word = words[i];
       var count = 0;
-      for(var j = 0; j < docVector.length; j += 1) {
-        if(docVector[j].indexOf(word) != -1) count += 1;
+      for (var j = 0; j < docVector.length; j += 1) {
+        if (docVector[j].indexOf(word) != -1) count += 1;
       }
       tfs.push(count);
     }
     return tfs;
-  }
+  };
 
-  var getIdfVector = function(docVector, words) {
+  var getIdfVector = function (docVector, words) {
     var idfs = [];
     var logDocCount = Math.log(docVector.length);
-    for(var i = 0; i < words.length; i += 1) {
+    for (var i = 0; i < words.length; i += 1) {
       var word = words[i];
       var count = 0;
-      for(var j = 0; j < docVector.length; j += 1) {
-        if(docVector[j].indexOf(word) != -1) count += 1;
+      for (var j = 0; j < docVector.length; j += 1) {
+        if (docVector[j].indexOf(word) != -1) count += 1;
       }
-      var idf = logDocCount - (count === 0? 0 : Math.log(count));
+      var idf = logDocCount - (count === 0 ? 0 : Math.log(count));
       idfs.push(idf);
     }
     return idfs;
-  }
+  };
 
-  var getScoredWords = function(words, scores) {
+  var getScoredWords = function (words, scores) {
     var scoredWords = [];
-    for(var i = 0; i < words.length; i += 1) {
-      var scoredWord = { 'word':words[i], 'score':scores[i] };
-      scoredWords.push(scoredWord);  
+    for (var i = 0; i < words.length; i += 1) {
+      var scoredWord = { 'word': words[i], 'score': scores[i] };
+      scoredWords.push(scoredWord);
     }
 
-    scoredWords.sort(function(a, b) {
+    scoredWords.sort(function (a, b) {
       return b.score - a.score;
     });
 
     return scoredWords;
-  }
+  };
 
   var words = getWords(documentVector);
   // console.log(words);
@@ -289,7 +289,7 @@ function computeTfIdf(documentVector) {
   var tfs = getTfVector(documentVector, words);
   var idfs = getIdfVector(documentVector, words);
   var scores = [];
-  for(var i = 0; i < wordcount; i += 1) {
+  for (var i = 0; i < wordcount; i += 1) {
     scores.push(tfs[i] * idfs[i]);
   }
   var scoredWords = getScoredWords(words, scores);

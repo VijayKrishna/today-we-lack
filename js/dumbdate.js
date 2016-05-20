@@ -1,7 +1,7 @@
 var Dumbdate = function(date_string) {
   this.date_string = date_string;
   this.date_array = date_string.split('-');
-}
+};
 
 Dumbdate.prototype.getYear = function() {
   return this.date_array[0];
