@@ -114,6 +114,40 @@ button::-moz-focus-inner {
   border: none;
 }
 
+paper-button {
+  color:#000;
+  font: normal 0.7em georgia, sans-serif;
+  padding: 0 1px 1px 1px;
+    margin: 0px;
+}
+
+paper-button:hover {
+  cursor: pointer;
+  background: steelblue;
+  color: snow;
+}
+
+
+paper-button:active {
+  background: steelblue;
+  color: snow;
+}
+
+paper-button:focus {
+  background: steelblue;
+  color: snow;
+}
+
+
+.label {
+  padding:5px;
+  background-color: grey;
+  border: none;
+  border-radius: 30px;
+  color:#fff;
+  font: normal 0.5em ariel, sans-serif;
+}
+
 .inline {
   display: inline;
 }

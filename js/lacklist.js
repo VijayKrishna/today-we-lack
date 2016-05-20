@@ -14,17 +14,22 @@ function go(argument) {
     allCities = getCityList(sortedData);
     console.log(allCities);
     var cityLis = d3.select('#cities').selectAll('li')
-      .data(allCities)
+      .data(allCities.slice(0,6))
       .enter().append('li');
 
-    cityLis.append('button')
-      .attr('class', 'button')
+    cityLis.append('paper-button')
       .on('click', function (d) {
-      return displayFilteredData({ 'city': d });
+      return displayFilteredData({ 'city': d.name });
     })
       .text(function (d) {
-      return d;
+      return d.name;
     });
+
+    cityLis.append('label')
+    .attr('class', 'label')
+    .text(function (d) {
+      return d.count;
+    })
 
     var lackcount = sortedData.length;
     var lackingTill = new Date(sortedData[0].date);
@@ -32,13 +37,14 @@ function go(argument) {
     var lackSummary = getLacklistSummary(lackcount, lackingFrom, lackingTill);
     d3.select('#lackcount').html(lackSummary);
 
-    var firstButton = d3.select('ul#' + argument).select('li').select('button');
+    var firstButton = d3.select('ul#' + argument).select('li').select('paper-button');
     firstButton.node().focus();
     var filter = {};
     if (argument === 'years') {
-      filter.year = firstButton.text();
+      filter.year = firstButton.text().trim();
+      console.log(filter.year)
     } else if (argument === 'cities') {
-      filter.city = firstButton.text();
+      filter.city = firstButton.text().trim();
     }
 
     displayFilteredData(filter);
@@ -180,7 +186,19 @@ function getLacklistSummary(lackcount, from, to) {
   return summary;
 }
 
+function indexOfElement(list, property, searchTerm) {
+  var index = -1;
+  for(var i = 0, len = list.length; i < len; i += 1) {
+      if (list[i][property] === searchTerm) {
+          index = i;
+          break;
+      }
+  }
+  return index;   
+}
+
 function getCityList(lackitems) {
+
   var cities = [];
   for (var i = 0; i < lackitems.length; i += 1) {
     var tags = lackitems[i].getTags();
@@ -192,13 +210,18 @@ function getCityList(lackitems) {
     }
 
     city = city.toLowerCase();
+    var cityIndex = indexOfElement(cities, "name", city);
 
-    if (cities.indexOf(city) === -1) {
-      cities.push(city);
+    if (cityIndex === -1) {
+      cities.push({"name" : city, "count" : 1});
+    } else {
+      cities[cityIndex].count += 1;
     }
   }
 
-  return cities.sort();
+  return cities.sort(function(a, b) {
+    return b.count - a.count;
+  });
 }
 
 function buildDocumentVector(lackitems) {
