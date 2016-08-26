@@ -6,3 +6,4 @@
 - material design look
 - add 2 visualizations (cities and word tree)
 - add more sources?
+- create general components?
