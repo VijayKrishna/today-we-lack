@@ -23,3 +23,11 @@
 - http://www.cssawds.com/
 - http://www.csswinner.com/
 - times of india
+
+## data sources
+- own scrapper
+- https://webhose.io/scraping-news-sites
+- http://newsrack.in/extras/known-indian-feeds
+- http://eventregistry.org/
+- http://storyzy.com/
+- 
