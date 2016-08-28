@@ -3,10 +3,11 @@
 
 ## stuff to do
 - update every day
-- material design look
+- fresh visual design
 - add 2 visualizations (cities and word tree)
 - add more sources?
 - create general components?
+- way to depict how viral an article was/ how many times it was read
 
 
 ## moodboard
