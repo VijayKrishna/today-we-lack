@@ -12,6 +12,7 @@
 - https://britishmuseum.withgoogle.com/
 - http://histography.io/
 - http://seeingdata.cleverfranke.com/
+- https://verily.com/ (color transition effect)
 
 
 ## marketing
@@ -27,4 +28,3 @@
 - http://newsrack.in/extras/known-indian-feeds
 - http://eventregistry.org/
 - http://storyzy.com/
-- 
