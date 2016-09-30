@@ -14,6 +14,7 @@
 - http://seeingdata.cleverfranke.com/
 - https://verily.com/ (color transition effect)
 - http://akshaykore.github.io/mumdata/
+- https://developers.google.com/chart/interactive/docs/gallery/wordtree
 
 
 ## marketing
