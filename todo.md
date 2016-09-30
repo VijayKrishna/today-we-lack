@@ -13,6 +13,7 @@
 - http://histography.io/
 - http://seeingdata.cleverfranke.com/
 - https://verily.com/ (color transition effect)
+- http://akshaykore.github.io/mumdata/
 
 
 ## marketing
