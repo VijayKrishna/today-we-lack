@@ -23,6 +23,7 @@
 - http://www.cssawds.com/
 - http://www.csswinner.com/
 - times of india
+- [fellows listed here](https://github.com/pchhibber/docs/blob/master/data%20visualisation%20references.md) 
 
 ## data sources
 - own scrapper
