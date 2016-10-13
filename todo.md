@@ -31,6 +31,7 @@
 - http://newsrack.in/extras/known-indian-feeds
 - http://eventregistry.org/
 - http://storyzy.com/
+- google alerts??? [example](https://github.com/nnhiti/google-alert-api)
 
 ## today we have?
 - once today we lack 1.0 is released, we could think of a parallel which reported interesting stories about what we have (as opposed to what we lack). Think positive news. Some possible sources/ references listed below
